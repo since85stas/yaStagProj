@@ -26,6 +26,7 @@ public class Potter {
 
     public static LinkedList<String> comb(int c, int n){
         LinkedList<String> s= new LinkedList<String>();
+
         for(int u= 0;u < 1 << n;u++)
             if(bitcount(u) == c) s.push(bitprint(u));
         Collections.sort(s);
