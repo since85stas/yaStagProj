@@ -17,7 +17,7 @@ public class Test {
 
 
         try {
-            File file = new File("input.txt");
+            File file = new File("input2.txt");
             Scanner scanner = new Scanner(file);
             goalNum = scanner.nextInt();
             tokens = new ArrayList<>();
@@ -25,25 +25,15 @@ public class Test {
                 tokens.add(scanner.nextInt());
             }
             int[] arr = null;
-            N = tokens.size();
+
             int maxV = Integer.MAX_VALUE;
             int goalSum = 0;
 
-            HashSet<Combination> comb = genComb();
+            tokens = deleteMores();
 
-//            for (Combination set: comb) {
-////                int[] pos = new int[set.size()];
-////                for (int i = 0; i < set.array.length; i++) {
-////                    if (set.array[i])
-////                      sum += tokens.get(i);
-////                }
-//                int diff = Math.abs(set.sum - goalNum);
-//                tree.put(diff, set.sum);
-//                if (diff < maxV) {
-//                    maxV = diff;
-//                    goalSum = set.sum;
-//                }
-//            }
+            N = tokens.size();
+
+            genComb();
 
             System.out.println(tree.firstEntry().getValue());
         } catch (Exception e) {
@@ -56,7 +46,31 @@ public class Test {
 
     }
 
-    private static HashSet<Combination> genComb() {
+    private static List<Integer> deleteMores() {
+        List<Integer> newList = new ArrayList<>();
+        HashMap<Integer, Integer> elem = new HashMap<>();
+        for (int i = 0; i < tokens.size(); i++) {
+            int token = tokens.get(i);
+            if (!elem.containsKey(token)) {
+                elem.put(token, 1);
+            } else if ( elem.get(token) >= 3 ){
+
+            } else {
+                int num = elem.get( token );
+                elem.put(token, num+1);
+            }
+        }
+        for ( Integer key: elem.keySet()
+             ) {
+            int num = elem.get(key);
+            for (int i = 0; i < num; i++) {
+                newList.add(key);
+            }
+        }
+        return newList;
+    }
+
+    private static void genComb() {
         arr = new Boolean[N];
         for (int i = 0; i < N; i++) {
             arr[i] = false;
@@ -75,29 +89,38 @@ public class Test {
 //            System.out.println(count);
             count++;
             Combination comb = new Combination(list);
+            int diff = 0;
+            boolean isEnd = false;
             if (!set.contains(comb)) {
                 set.add(comb);
-                int diff = Math.abs(comb.sum - goalNum);
+                diff = Math.abs(comb.sum - goalNum);
+                if (diff == 0) {
+                    isEnd = true;
+                }
                 tree.put(diff, comb.sum);
             }
+            if (isEnd) break;
             Collections.shuffle(list);
         }
-        return set;
     }
 
     static private class Combination {
 
-        boolean[] array;
-
+//        boolean[] array;
+        int arrNm[];
         int sum;
 
         Combination (List<Boolean> list) {
-            array = new boolean[list.size()];
+//            array = new boolean[list.size()];
             sum =0;
+            arrNm = new int[K];
+            int j = 0;
             for (int i = 0; i < list.size(); i++) {
-                array[i] = list.get(i);
-                if (array[i]) {
+//                array[i] = list.get(i);
+                if (list.get(i)) {
                     sum +=tokens.get(i);
+                    arrNm[j] = i;
+                    j++;
                 }
             }
         }
@@ -107,12 +130,12 @@ public class Test {
             if (this == o) return true;
             if (!(o instanceof Combination)) return false;
             Combination that = (Combination) o;
-            return Arrays.equals(array, that.array);
+            return Arrays.equals(arrNm, that.arrNm);
         }
 
         @Override
         public int hashCode() {
-            return Arrays.hashCode(array);
+            return Arrays.hashCode(arrNm);
         }
     }
 

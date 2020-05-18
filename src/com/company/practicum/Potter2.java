@@ -13,15 +13,15 @@ public class Potter2 {
 
     static TreeMap<Integer, Integer> tree= new TreeMap<>();
 
-    static public List<List<Integer>> combine(int n, int k) {
-        List<List<Integer>> ans = new ArrayList<>();
-        dfs(ans, new ArrayList<Integer>(), k, 0, n-k);
-        return ans;
+    static void  combine(int n, int k) {
+//        List<List<Integer>> ans = new ArrayList<>();
+        dfs(new ArrayList<Integer>(), k, 0, n-k);
+//        return ans;
     }
 
-    static private void dfs(List<List<Integer>> ans, List<Integer> list, int kLeft, int from, int to) {
+    static private void dfs( List<Integer> list, int kLeft, int from, int to) {
         if (kLeft == 0) {
-            ans.add(new ArrayList<Integer>(list));
+//            ans.add(new ArrayList<Integer>(list));
             int sum = 0;
             for (int i = 0; i < list.size(); i++) {
                 sum += tokens.get(list.get(i));
@@ -32,7 +32,7 @@ public class Potter2 {
         }
         for (int i=from; i<=to; ++i) {
             list.add(i);
-            dfs(ans, list, kLeft-1, i+1, to+1);
+            dfs(list, kLeft-1, i+1, to+1);
             list.remove(list.size()-1);
         }
     }
